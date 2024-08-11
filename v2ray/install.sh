@@ -9496,7 +9496,7 @@ menu() {
     showInstallStatus
     checkWgetShowProgress
     echoContent red ""
-    echoContent skyBlue "-------------------------Tool Management-------------------- ---------"
+    echoContent skyBlue "-------------------------Install Management-------------------- ---------"
     if [[ -n "${coreInstallType}" ]]; then
         echoContent yellow "1. Reinstall"
     else
