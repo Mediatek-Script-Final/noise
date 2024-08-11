@@ -9495,7 +9495,7 @@ menu() {
     echoContent green "Description: 8-in-1 coexistence script\c"
     showInstallStatus
     checkWgetShowProgress
-    echoContent red "=============================================================="
+    echoContent red ""
     if [[ -n "${coreInstallType}" ]]; then
         echoContent yellow "1. Reinstall"
     else
