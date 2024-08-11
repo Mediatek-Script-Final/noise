@@ -7493,32 +7493,31 @@ setSocks5InboundRouting() {
 
 }
 
-# socks5 出站
 setSocks5Outbound() {
 
-    echoContent yellow "\n==================== Configure Socks5 outbound (forwarder, proxy) ============== =======\n"
+    echoContent yellow "\n==================== 配置 Socks5 出站（转发机、代理机） =====================\n"
     echo
-    read -r -p "Please enter the IP address of the floor machine:" socks5RoutingOutboundIP
+    read -r -p "请输入落地机IP地址:" socks5RoutingOutboundIP
     if [[ -z "${socks5RoutingOutboundIP}" ]]; then
-        echoContent red " ---> IP cannot be empty"
+        echoContent red " ---> IP不可为空"
         exit 0
     fi
     echo
-    read -r -p "Please enter the floor machine port:" socks5RoutingOutboundPort
+    read -r -p "请输入落地机端口:" socks5RoutingOutboundPort
     if [[ -z "${socks5RoutingOutboundPort}" ]]; then
-        echoContent red " ---> Port cannot be empty"
+        echoContent red " ---> 端口不可为空"
         exit 0
     fi
     echo
-    read -r -p "Please enter user name:" socks5RoutingOutboundUserName
+    read -r -p "请输入用户名:" socks5RoutingOutboundUserName
     if [[ -z "${socks5RoutingOutboundUserName}" ]]; then
-        echoContent red " ---> Username cannot be empty"
+        echoContent red " ---> 用户名不可为空"
         exit 0
     fi
     echo
-    read -r -p "Please enter user password:" socks5RoutingOutboundPassword
+    read -r -p "请输入用户密码:" socks5RoutingOutboundPassword
     if [[ -z "${socks5RoutingOutboundPassword}" ]]; then
-        echoContent red " ---> User password cannot be empty"
+        echoContent red " ---> 用户密码不可为空"
         exit 0
     fi
     echo
