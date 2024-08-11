@@ -9092,6 +9092,7 @@ initRealityKey() {
     fi
     echoContent green "\n privateKey:${realityPrivateKey}"
     echoContent green "\n publicKey:${realityPublicKey}"
+}
 
 checkRealityDest() {
     local traceResult=
