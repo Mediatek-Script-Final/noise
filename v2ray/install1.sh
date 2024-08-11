@@ -1379,12 +1379,12 @@ initTLSNginxConfig() {
             echoContent yellow "\n ---> Domain name: ${domain}"
         else
             echo
-            echoContent yellow "Please enter the domain name to be configured. Example: mtk.dexterpogi.com --->"
+            echoContent yellow "Please enter the domain name to be configured. Example: www.dexterpogi.com --->"
             read -r -p "domain name:" domain
         fi
     else
         echo
-        echoContent yellow "Please enter the domain name to be configured. Example: mtk.dexterpogi.com --->"
+        echoContent yellow "Please enter the domain name to be configured. Example: www.dexterpogi.com --->"
         read -r -p "domain name:" domain
     fi
 
@@ -1400,7 +1400,6 @@ initTLSNginxConfig() {
         handleNginx stop
     fi
 }
-
 
 removeNginxDefaultConf() {
     if [[ -f ${nginxConfigPath}default.conf ]]; then
@@ -1803,30 +1802,29 @@ acmeInstallSSL() {
     fi
 }
 
-# Custom port
 customPortFunction() {
     local historyCustomPortStatus=
     if [[ -n "${customPort}" || -n "${currentPort}" ]]; then
         echo
-        read -r -p "Read the port from the last installation. Do you want to use the port from the last installation? [y/n]:" historyCustomPortStatus
+        read -r -p "读取到上次安装时的端口，是否使用上次安装时的端口？[y/n]:" historyCustomPortStatus
         if [[ "${historyCustomPortStatus}" == "y" ]]; then
             port=${currentPort}
-            echoContent yellow "\n ---> Port: ${port}"
+            echoContent yellow "\n ---> 端口: ${port}"
         fi
     fi
     if [[ -z "${currentPort}" ]] || [[ "${historyCustomPortStatus}" == "n" ]]; then
         echo
 
         if [[ -n "${btDomain}" ]]; then
-            echoContent yellow "Please enter the port [cannot be the same as the BT Panel/1Panel port, press Enter to randomize]"
-            read -r -p "port:" port
+            echoContent yellow "请输入端口[不可与BT Panel/1Panel端口相同，回车随机]"
+            read -r -p "端口:" port
             if [[ -z "${port}" ]]; then
                 port=$((RANDOM % 20001 + 10000))
             fi
         else
             echo
-            echoContent yellow "Please enter the port [default: 443], you can customize the port [press enter to use the default]"
-            read -r -p "port:" port
+            echoContent yellow "请输入端口[默认: 443]，可自定义端口[回车使用默认]"
+            read -r -p "端口:" port
             if [[ -z "${port}" ]]; then
                 port=443
             fi
@@ -1838,23 +1836,22 @@ customPortFunction() {
         if [[ -n "${port}" ]]; then
             if ((port >= 1 && port <= 65535)); then
                 allowPort "${port}"
-                echoContent yellow "\n ---> Port: ${port}"
+                echoContent yellow "\n ---> 端口: ${port}"
                 if [[ -z "${btDomain}" ]]; then
                     checkDNSIP "${domain}"
                     removeNginxDefaultConf
                     checkPortOpen "${port}" "${domain}"
                 fi
             else
-                echoContent red " ---> Port input error"
+                echoContent red " ---> 端口输入错误"
                 exit 0
             fi
         else
-            echoContent red " ---> Port cannot be empty"
+            echoContent red " ---> 端口不可为空"
             exit 0
         fi
     fi
 }
-
 
 checkPort() {
     if [[ -n "$1" ]] && lsof -i "tcp:$1" | grep -q LISTEN; then
