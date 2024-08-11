@@ -7441,13 +7441,13 @@ setSocks5InboundRouting() {
     echoContent yellow"dāng shūrù de guīzé pǐpèi dào geosite huòzhě rule_set hòu huì shǐyòng xiāngyìng de guīzé\n"
     echoContent yellow"rú wúfǎ pǐpèi zé, zé shǐyòng domain jīngquè pǐpèi\n"
 
-    read -r -p"shìfǒu yǔnxǔ suǒyǒu wǎngzhàn? Qǐng xuǎnzé [y/n]:" Socks5InboundRoutingDomainStatus
-    if [[ "${socks5InboundRoutingDomainStatus}" =="y" ]]; then
-        addSingBoxRouteRule"01_direct_outbound" "" "socks5_inbound_route"
+    read -r -p "是否允许所有网站？请选择[y/n]:" socks5InboundRoutingDomainStatus
+    if [[ "${socks5InboundRoutingDomainStatus}" == "y" ]]; then
+        addSingBoxRouteRule "01_direct_outbound" "" "socks5_inbound_route"
         local route=
-        route=$(jq".Route.Rules[0].Inbound = [\"socks5_inbound\"]" "${singBoxConfigPath}socks5_inbound_route.Json")
-        route=$(echo"${route}" | jq".Route.Rules[0].Source_ip_cidr=${socks5InboundRoutingIPs}")
-        echo"${route}" | jq. >"${SingBoxConfigPath}socks5_inbound_route.Json"
+        route=$(jq ".route.rules[0].inbound = [\"socks5_inbound\"]" "${singBoxConfigPath}socks5_inbound_route.json")
+        route=$(echo "${route}" | jq ".route.rules[0].source_ip_cidr=${socks5InboundRoutingIPs}")
+        echo "${route}" | jq . >"${singBoxConfigPath}socks5_inbound_route.json"
 
         addSingBoxOutbound block
         addSingBoxOutbound"01_direct_outbound"
