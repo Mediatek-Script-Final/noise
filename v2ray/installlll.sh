@@ -7415,31 +7415,31 @@ setSocks5InboundRouting() {
     singBoxConfigPath=/etc/v2ray-agent/sing-box/conf/config/
 
     if [[ "$1" == "addRules" && ! -f "${singBoxConfigPath}socks5_inbound_route.json" && ! -f "${configPath}09_routing.json" ]]; then
-        echoContent red " ---> Please install inbound diversion and then add diversion rules"
-        echoContent red " ---> If you have chosen to allow all websites, please reinstall the diversion and set the rules"
+        echoContent red " ---> 请安装入站分流后再添加分流规则"
+        echoContent red " ---> 如已选择允许所有网站，请重新安装分流后设置规则"
         exit 0
     fi
     local socks5InboundRoutingIPs=
     if [[ "$1" == "addRules" ]]; then
         socks5InboundRoutingIPs=$(jq .route.rules[0].source_ip_cidr "${singBoxConfigPath}socks5_inbound_route.json")
     else
-        echoContent red "================================================== ==============="
-        echoContent skyBlue "Please enter the IP addresses that are allowed to be accessed. Multiple IPs are separated by commas. For example: 1.1.1.1,2.2.2.2\n"
+        echoContent red "=============================================================="
+        echoContent skyBlue "请输入允许访问的IP地址，多个IP英文逗号隔开。例如:1.1.1.1,2.2.2.2\n"
         read -r -p "IP:" socks5InboundRoutingIPs
 
         if [[ -z "${socks5InboundRoutingIPs}" ]]; then
-            echoContent red " ---> IP cannot be empty"
+            echoContent red " ---> IP不可为空"
             exit 0
         fi
         socks5InboundRoutingIPs=$(echo "\"${socks5InboundRoutingIPs}"\" | jq -c '.|split(",")')
     fi
 
-    EchoContent red"=============================================================="
-    echoContent skyBlue"qǐng shūrù yào fēnliú de yùmíng\n"
-    echoContent yellow"zhīchí Xray-core geosite pǐpèi, zhīchí sing-box1.8+ Rule_set pǐpèi\n"
-    echoContent yellow"fēi zēng liàng tiānjiā, huì tìhuàn yuán yǒu guīzé\n"
-    echoContent yellow"dāng shūrù de guīzé pǐpèi dào geosite huòzhě rule_set hòu huì shǐyòng xiāngyìng de guīzé\n"
-    echoContent yellow"rú wúfǎ pǐpèi zé, zé shǐyòng domain jīngquè pǐpèi\n"
+    echoContent red "=============================================================="
+    echoContent skyBlue "请输入要分流的域名\n"
+    echoContent yellow "支持Xray-core geosite匹配，支持sing-box1.8+ rule_set匹配\n"
+    echoContent yellow "非增量添加，会替换原有规则\n"
+    echoContent yellow "当输入的规则匹配到geosite或者rule_set后会使用相应的规则\n"
+    echoContent yellow "如无法匹配则，则使用domain精确匹配\n"
 
     read -r -p "是否允许所有网站？请选择[y/n]:" socks5InboundRoutingDomainStatus
     if [[ "${socks5InboundRoutingDomainStatus}" == "y" ]]; then
@@ -7450,35 +7450,12 @@ setSocks5InboundRouting() {
         echo "${route}" | jq . >"${singBoxConfigPath}socks5_inbound_route.json"
 
         addSingBoxOutbound block
-        addSingBoxOutbound"01_direct_outbound"
-    else
-        echoContent yellow"lùrù shìlì:Netflix,openai,v2ray-agent.Com\n"
-        read -r -p"yùmíng:" Socks5InboundRoutingDomain
-        if [[ -z"${socks5InboundRoutingDomain}" ]]; then
-            echoContent red" ---> yùmíng bùkě wéi kōng"
-            exit 0
-	echoContent red "================================================== ==============="
-    echoContent skyBlue "Please enter the domain name to be diverted\n"
-    echoContent yellow "Supports Xray-core geosite matching, supports sing-box1.8+ rule_set matching\n"
-    echoContent yellow "Non-incremental addition, will replace the original rules\n"
-    echoContent yellow "When the entered rule matches geosite or rule_set, the corresponding rule will be used\n"
-    echoContent yellow "If it cannot be matched, use domain exact match\n"
-
-    read -r -p "Do you want to allow all websites? Please select [y/n]:" socks5InboundRoutingDomainStatus
-    if [[ "${socks5InboundRoutingDomainStatus}" == "y" ]]; then
-        addSingBoxRouteRule "01_direct_outbound" "" "socks5_inbound_route"
-        local route=
-        route=$(jq ".route.rules[0].inbound = [\"socks5_inbound\"]" "${singBoxConfigPath}socks5_inbound_route.json")
-        route=$(echo "${route}" | jq ".route.rules[0].source_ip_cidr=${socks5InboundRoutingIPs}")
-        echo "${route}" | jq . >"${singBoxConfigPath}socks5_inbound_route.json"
-
-        addSingBoxOutbound block
         addSingBoxOutbound "01_direct_outbound"
     else
-        echoContent yellow "Input example: netflix,openai,v2ray-agent.com\n"
-        read -r -p "Domain name:" socks5InboundRoutingDomain
+        echoContent yellow "录入示例:netflix,openai,v2ray-agent.com\n"
+        read -r -p "域名:" socks5InboundRoutingDomain
         if [[ -z "${socks5InboundRoutingDomain}" ]]; then
-            echoContent red " ---> Domain name cannot be empty"
+            echoContent red " ---> 域名不可为空"
             exit 0
         fi
         addSingBoxRouteRule "01_direct_outbound" "${socks5InboundRoutingDomain}" "socks5_inbound_route"
