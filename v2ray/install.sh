@@ -2197,9 +2197,8 @@ renewalTLS() {
 }
 
 checkTLStatus() {
-
-    if [[ -d "$HOME/.acme.sh/${currentHost}_ecc" ]] && [[ -f "$HOME/.acme.sh/${currentHost}_ecc/${currentHost}.key" ] ] && [[ -f "$HOME/.acme.sh/${currentHost}_ecc/${currentHost}.cer" ]]; then
-        modifyTime=$(stat "$HOME/.acme.sh/${currentHost}_ecc/${currentHost}.cer" | sed -n '7,6p' | awk '{print $2" "$3" "$4" " $5}')
+    if [[ -d "$HOME/.acme.sh/${currentHost}_ecc" ]] && [[ -f "$HOME/.acme.sh/${currentHost}_ecc/${currentHost}.key" ]] && [[ -f "$HOME/.acme.sh/${currentHost}_ecc/${currentHost}.cer" ]]; then
+        modifyTime=$(stat "$HOME/.acme.sh/${currentHost}_ecc/${currentHost}.cer" | sed -n '7,6p' | awk '{print $2" "$3" "$4" "$5}')
 
         modifyTime=$(date +%s -d "${modifyTime}")
         currentTime=$(date +%s)
@@ -2209,15 +2208,14 @@ checkTLStatus() {
 
         tlsStatus=${remainingDays}
         if [[ ${remainingDays} -le 0 ]]; then
-            tlsStatus="Expired"
+            tlsStatus="已过期"
         fi
 
-        echoContent skyBlue " ---> Certificate generation date: $(date -d "@${modifyTime}" +"%F %H:%M:%S")"
-        echoContent skyBlue " ---> Certificate generation days: ${days}"
-        echoContent skyBlue " ---> Number of days remaining on the certificate:${tlsStatus}"
+        echoContent skyBlue " ---> 证书生成日期:$(date -d "@${modifyTime}" +"%F %H:%M:%S")"
+        echoContent skyBlue " ---> 证书生成天数:${days}"
+        echoContent skyBlue " ---> 证书剩余天数:${tlsStatus}"
     fi
 }
-
 
 installV2Ray() {
     readInstallType
